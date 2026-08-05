@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37301.10 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistantCoreEngine", "AssistantCoreEngine.csproj", "{02B8E63D-2249-45AC-AFEE-66ABBB704C81}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02B8E63D-2249-45AC-AFEE-66ABBB704C81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02B8E63D-2249-45AC-AFEE-66ABBB704C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02B8E63D-2249-45AC-AFEE-66ABBB704C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02B8E63D-2249-45AC-AFEE-66ABBB704C81}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8198647-D88B-4593-BAD7-56F6697AC35C}
+	EndGlobalSection
+EndGlobal
