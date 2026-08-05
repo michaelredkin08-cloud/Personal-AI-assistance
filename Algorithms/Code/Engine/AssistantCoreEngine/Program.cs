@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 
-string dbPath = @"C:\Users\Michael\Desktop\My Career\PERSONAL PROJECT\SECOND BRAIN ARCHITECTURE\Notes\db\assistant.db";
+string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "db", "assistant.db"); // Because it is public , better not show path 
 string connectionString = $"Data Source={dbPath}";
 
 using (var connection = new SqliteConnection(connectionString))
