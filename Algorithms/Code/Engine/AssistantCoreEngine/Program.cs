@@ -1,8 +1,17 @@
-﻿using Microsoft.Data.Sqlite;
+﻿//Dependencies + Configuration
+using Microsoft.Data.Sqlite;
+
 
 string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "db", "assistant.db"); // Because it is public , better not show path 
 string connectionString = $"Data Source={dbPath}";
 
+//END -- Dependencies + Configuration --
+
+
+
+
+
+// --- Database Initialisation ---
 using (var connection = new SqliteConnection(connectionString))
 {
     connection.Open();
@@ -25,6 +34,12 @@ using (var connection = new SqliteConnection(connectionString))
 
     Console.WriteLine("Database ready at: " + dbPath);
 }
+// END -- Database Initialisation --
+
+
+
+
+
 
 
 //Notes
