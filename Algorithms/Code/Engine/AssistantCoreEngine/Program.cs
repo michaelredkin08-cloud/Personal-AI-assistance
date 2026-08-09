@@ -3,8 +3,8 @@ using Microsoft.Data.Sqlite;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-string notesPath = @"C:\Assistant\Knowledge\Notes";
-string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "db", "assistant.db");
+string notesPath = @"C:\Users\Michael\Desktop\My Career\PERSONAL PROJECT\SECOND BRAIN ARCHITECTURE\Notes"; // Hard code path for now 
+string dbPath = @"C:\Users\Michael\Desktop\My Career\PERSONAL PROJECT\SECOND BRAIN ARCHITECTURE\Notes\db\assistant.db"; // Hard code path for now Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "db", "assistant.db");
 string connectionString = $"Data Source={dbPath}";
 //END -- Dependencies + Configuration --
 
@@ -14,6 +14,7 @@ string connectionString = $"Data Source={dbPath}";
 // --- Database Initialisation ---
 using var connection = new SqliteConnection(connectionString);
 Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!); // Create db folder if it doesn't exist
+Directory.CreateDirectory(Path.GetDirectoryName(notesPath)!); // Create Notes folder if it doesn't exist
 connection.Open();
 
 string createTableSql = @"
@@ -89,3 +90,29 @@ foreach (string file in files)
 
 Console.WriteLine("\nAll notes indexed successfully.");
 // END -- Indexer --
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --- Models ---
+public class NoteFrontMatter
+{
+    public List<string>? Tags { get; set; }
+    public string? Mode { get; set; }
+    public bool HardToRemember { get; set; }
+    public bool Important { get; set; }
+}
+// END -- Models --
