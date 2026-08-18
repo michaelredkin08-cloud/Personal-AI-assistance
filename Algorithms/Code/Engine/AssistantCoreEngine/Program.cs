@@ -20,7 +20,7 @@ connection.Open();
 string createTableSql = @"
     CREATE TABLE IF NOT EXISTS Notes (
         Id INTEGER PRIMARY KEY AUTOINCREMENT,
-        FilePath TEXT NOT NULL,
+        FilePath TEXT NOT NULL UNIQUE, 
         Title TEXT,
         Tags TEXT,
         Mode TEXT,
