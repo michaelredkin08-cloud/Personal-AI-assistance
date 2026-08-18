@@ -38,7 +38,7 @@ Console.WriteLine("Database ready.");
 
 // --- Indexer ---
 var deserializer = new DeserializerBuilder()
-    .WithNamingConvention(UnderscoredNamingConvention.Instance)
+    .WithNamingConvention(UnderscoredNamingConvention.Instance)   // Converts HardToRemember from C# into hard_to_remember for YamlDotNet
     .IgnoreUnmatchedProperties()
     .Build();
 
@@ -50,6 +50,20 @@ foreach (string file in files)
 
     // Split front-matter from body
     string[] parts = content.Split("---", 3, StringSplitOptions.RemoveEmptyEntries);
+    /*
+                    ---
+                    tags: [python]
+                    mode: coding
+                    ---
+                    # Title
+                    Body text
+
+
+
+                    Piece 0 → ""                                (empty — nothing before the first ---)
+                    Piece 1 → "tags: [python] mode: coding"     (the YAML)
+                    Piece 2 → "# FastAPI... Remember to run"    (the note body)
+    */
     if (parts.Length < 2) continue;
 
     string yaml = parts[0].Trim();
@@ -93,7 +107,49 @@ Console.WriteLine("\nAll notes indexed successfully.");
 
 
 
+// --- Search --- 
+while (true)
+{
+    Console.WriteLine("\nType a keyword to search (or 'exit' to quit):");
+    string query = Console.ReadLine() ?? "";
 
+    if (query.ToLower() == "exit") break;
+    if (string.IsNullOrWhiteSpace(query)) continue;
+
+    string searchSql = @"
+        SELECT Title, Tags, Mode, FilePath, HardToRemember, Important
+        FROM Notes
+        WHERE Title LIKE @query
+           OR Tags LIKE @query
+           OR Mode LIKE @query
+        ORDER BY Important DESC, HardToRemember DESC";
+
+    using (var cmd = new SqliteCommand(searchSql, connection))
+    {
+        cmd.Parameters.AddWithValue("@query", $"%{query}%");
+
+        using (var reader = cmd.ExecuteReader())
+        {
+            bool found = false;
+
+            while (reader.Read())
+            {
+                found = true;
+                Console.WriteLine("\n--- Result ---");
+                Console.WriteLine($"Title    : {reader["Title"]}");
+                Console.WriteLine($"Tags     : {reader["Tags"]}");
+                Console.WriteLine($"Mode     : {reader["Mode"]}");
+                Console.WriteLine($"File     : {reader["FilePath"]}");
+                Console.WriteLine($"Important: {(Convert.ToInt32(reader["Important"]) == 1 ? "Yes" : "No")}");
+                Console.WriteLine($"Hard to remember: {(Convert.ToInt32(reader["HardToRemember"]) == 1 ? "Yes" : "No")}");
+            }
+
+            if (!found)
+                Console.WriteLine("No notes found for that keyword.");
+        }
+    }
+}
+// END -- Search --
 
 
 
