@@ -19,14 +19,20 @@ connection.Open();
 
 string createTableSql = @"
     CREATE TABLE IF NOT EXISTS Notes (
-        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-        FilePath TEXT NOT NULL UNIQUE, 
-        Title TEXT,
-        Tags TEXT,
-        Mode TEXT,
-        HardToRemember INTEGER DEFAULT 0,
-        Important INTEGER DEFAULT 0
-    );";
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    FilePath TEXT NOT NULL UNIQUE,
+    Title TEXT,
+    Tags TEXT,
+    Mode TEXT,
+    SubMode TEXT,
+    HardToRemember INTEGER DEFAULT 0,
+    Important INTEGER DEFAULT 0,
+    SourceUrl TEXT,
+    BodyContent TEXT,
+    DateCreated TEXT,
+    LastAccessedDate TEXT,
+    State TEXT DEFAULT 'active'
+);";
 
 using (var command = new SqliteCommand(createTableSql, connection))
     command.ExecuteNonQuery();
@@ -85,8 +91,12 @@ foreach (string file in files)
 
     // Insert into database
     string insertSql = @"
-        INSERT OR REPLACE INTO Notes (FilePath, Title, Tags, Mode, HardToRemember, Important)
-        VALUES (@FilePath, @Title, @Tags, @Mode, @HardToRemember, @Important);";
+    INSERT OR REPLACE INTO Notes 
+        (FilePath, Title, Tags, Mode, SubMode, HardToRemember, Important, 
+         SourceUrl, BodyContent, DateCreated, LastAccessedDate, State)
+    VALUES 
+        (@FilePath, @Title, @Tags, @Mode, @SubMode, @HardToRemember, @Important,
+         @SourceUrl, @BodyContent, @DateCreated, @LastAccessedDate, @State);";
 
     using (var cmd = new SqliteCommand(insertSql, connection))
     {
@@ -94,8 +104,14 @@ foreach (string file in files)
         cmd.Parameters.AddWithValue("@Title", title);
         cmd.Parameters.AddWithValue("@Tags", string.Join(", ", meta.Tags ?? new List<string>()));
         cmd.Parameters.AddWithValue("@Mode", meta.Mode ?? "");
+        cmd.Parameters.AddWithValue("@SubMode", meta.SubMode ?? "");
         cmd.Parameters.AddWithValue("@HardToRemember", meta.HardToRemember ? 1 : 0);
         cmd.Parameters.AddWithValue("@Important", meta.Important ? 1 : 0);
+        cmd.Parameters.AddWithValue("@SourceUrl", meta.SourceUrl ?? "");
+        cmd.Parameters.AddWithValue("@BodyContent", body);
+        cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now.ToString("yyyy-MM-dd"));
+        cmd.Parameters.AddWithValue("@LastAccessedDate", DateTime.Now.ToString("yyyy-MM-dd"));
+        cmd.Parameters.AddWithValue("@State", "active");
         cmd.ExecuteNonQuery();
     }
 
@@ -168,7 +184,9 @@ public class NoteFrontMatter
 {
     public List<string>? Tags { get; set; }
     public string? Mode { get; set; }
+    public string? SubMode { get; set; }
     public bool HardToRemember { get; set; }
     public bool Important { get; set; }
+    public string? SourceUrl { get; set; }
 }
 // END -- Models --
