@@ -6,3 +6,9 @@
 /Algorithms/Code/Engine/AssistantOverlay/bin/Debug/net8.0-windows
 /Algorithms/Code/Engine/AssistantOverlay/obj
 /Algorithms/Code/Engine/AssistantOverlay/AssistantOverlay.csproj.user
+
+
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user

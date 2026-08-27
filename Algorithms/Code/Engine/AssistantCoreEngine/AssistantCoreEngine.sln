@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37301.10 d17.14
+VisualStudioVersion = 17.14.37301.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistantCoreEngine", "AssistantCoreEngine.csproj", "{02B8E63D-2249-45AC-AFEE-66ABBB704C81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistantOverlay", "AssistantOverlay\AssistantOverlay.csproj", "{5BFBC09F-9E8D-4E6E-96B7-0E6B7D55490E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{02B8E63D-2249-45AC-AFEE-66ABBB704C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02B8E63D-2249-45AC-AFEE-66ABBB704C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02B8E63D-2249-45AC-AFEE-66ABBB704C81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BFBC09F-9E8D-4E6E-96B7-0E6B7D55490E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BFBC09F-9E8D-4E6E-96B7-0E6B7D55490E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BFBC09F-9E8D-4E6E-96B7-0E6B7D55490E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BFBC09F-9E8D-4E6E-96B7-0E6B7D55490E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
