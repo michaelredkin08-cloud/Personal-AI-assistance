@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Algorithms/Code/Engine/.vs
+/Algorithms/Code/Engine/AssistantOverlay/bin/Debug/net8.0-windows
+/Algorithms/Code/Engine/AssistantOverlay/obj
+/Algorithms/Code/Engine/AssistantOverlay/AssistantOverlay.csproj.user
