@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows;
 using MessageBox = System.Windows.MessageBox;
+
 namespace AssistantOverlay
 {
     public partial class SaveNoteWindow : Window
@@ -13,10 +14,32 @@ namespace AssistantOverlay
             InitializeComponent();
             this.selectedText = selectedText;
 
-            // Show the selected text
-            SelectedTextBox.Text = selectedText;
+            // Always appear in top-right area
+            Left = SystemParameters.PrimaryScreenWidth - 540;
+            Top = 120;
 
-            // Populate folder options
+            // Make sure it appears on top
+            Topmost = true;
+
+            UpdateText(selectedText);
+            PopulateFolders();
+        }
+
+        // Called when hotkey pressed again while panel is open
+        public void UpdateText(string newText)
+        {
+            selectedText = newText;
+            SelectedTextBox.Text = newText;
+            SuggestFolder(newText);
+
+            // Update title suggestion
+            TitleBox.Text = newText.Split('\n')[0].Trim().Replace("#", "").Trim();
+            if (TitleBox.Text.Length > 50)
+                TitleBox.Text = TitleBox.Text.Substring(0, 50);
+        }
+
+        private void PopulateFolders()
+        {
             FolderComboBox.Items.Add("Coding/CSharp");
             FolderComboBox.Items.Add("Coding/SQL");
             FolderComboBox.Items.Add("Coding/Python");
@@ -24,9 +47,11 @@ namespace AssistantOverlay
             FolderComboBox.Items.Add("Tasks");
             FolderComboBox.Items.Add("Ideas");
             FolderComboBox.Items.Add("General");
+        }
 
-            // Auto-suggest folder based on keywords in selected text
-            string lower = selectedText.ToLower();
+        private void SuggestFolder(string text)
+        {
+            string lower = text.ToLower();
             if (lower.Contains("c#") || lower.Contains("csharp") || lower.Contains(".net"))
                 FolderComboBox.SelectedItem = "Coding/CSharp";
             else if (lower.Contains("sql") || lower.Contains("database") || lower.Contains("query"))
@@ -35,11 +60,6 @@ namespace AssistantOverlay
                 FolderComboBox.SelectedItem = "Coding/Python";
             else
                 FolderComboBox.SelectedItem = "General";
-
-            // Auto-suggest title from first line
-            TitleBox.Text = selectedText.Split('\n')[0].Trim().Replace("#", "").Trim();
-            if (TitleBox.Text.Length > 50)
-                TitleBox.Text = TitleBox.Text.Substring(0, 50);
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -55,11 +75,9 @@ namespace AssistantOverlay
                 return;
             }
 
-            // Build the folder path
             string folderPath = Path.Combine(notesBasePath, folder.Replace("/", "\\"));
             Directory.CreateDirectory(folderPath);
 
-            // Build the file name
             string fileName = title.ToLower()
                 .Replace(" ", "-")
                 .Replace("#", "")
@@ -67,7 +85,6 @@ namespace AssistantOverlay
 
             string filePath = Path.Combine(folderPath, fileName);
 
-            // Build the note content with front-matter
             string noteContent = $@"---
 tags: []
 mode: {folder.Split('/')[0].ToLower()}

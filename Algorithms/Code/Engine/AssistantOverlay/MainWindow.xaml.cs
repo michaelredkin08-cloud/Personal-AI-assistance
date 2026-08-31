@@ -37,6 +37,13 @@ namespace AssistantOverlay
         // Triggered when Ctrl+ALT+B (It may change later)
         private static SaveNoteWindow? _savePanel = null;
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+
+        private const byte VK_CONTROL = 0x11;
+        private const byte VK_C = 0x43;
+        private const uint KEYEVENTF_KEYUP = 0x0002;
+
         private async void OnSaveHotkey(object? sender, HotkeyEventArgs e)
         {
             e.Handled = true;
@@ -44,26 +51,32 @@ namespace AssistantOverlay
             // Save current clipboard
             string previousClipboard = Clipboard.ContainsText() ? Clipboard.GetText() : "";
 
-            // Simulate Ctrl+C
-            System.Windows.Forms.SendKeys.SendWait("^c");
+            // Clear clipboard first so we can detect if copy worked
+            Clipboard.Clear();
+
+            // Send Ctrl+C using low-level Windows API
+            keybd_event(VK_CONTROL, 0, 0, 0);
+            keybd_event(VK_C, 0, 0, 0);
+            keybd_event(VK_C, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
 
             // Wait for clipboard to update
             await Task.Delay(300);
 
-            string selectedText = Clipboard.GetText();
+            string selectedText = Clipboard.ContainsText() ? Clipboard.GetText() : "";
 
             // Restore previous clipboard
             if (!string.IsNullOrEmpty(previousClipboard))
                 Clipboard.SetText(previousClipboard);
 
-            if (string.IsNullOrWhiteSpace(selectedText) || selectedText == previousClipboard)
+            if (string.IsNullOrWhiteSpace(selectedText))
             {
                 MessageBox.Show("No text selected. Please select some text first.",
                     "Second Brain", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            // If panel already open, just update it and bring to front
+            // If panel already open, update and bring to front
             if (_savePanel != null && _savePanel.IsVisible)
             {
                 _savePanel.UpdateText(selectedText);
