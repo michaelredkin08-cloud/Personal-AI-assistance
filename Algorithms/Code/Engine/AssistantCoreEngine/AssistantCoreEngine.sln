@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.37301.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistantCoreEngine", "AssistantCoreEngine.csproj", "{02B8E63D-2249-45AC-AFEE-66ABBB704C81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistantOverlay", "AssistantOverlay\AssistantOverlay.csproj", "{5BFBC09F-9E8D-4E6E-96B7-0E6B7D55490E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistantOverlay", "..\AssistantOverlay\AssistantOverlay.csproj", "{5BFBC09F-9E8D-4E6E-96B7-0E6B7D55490E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
