@@ -34,35 +34,49 @@ namespace AssistantOverlay
             OnSaveHotkey);
         }
 
-        // Triggered when Ctrl+Shift+S is pressed anywhere on the system
+        // Triggered when Ctrl+ALT+B (It may change later)
+        private static SaveNoteWindow? _savePanel = null;
+
         private async void OnSaveHotkey(object? sender, HotkeyEventArgs e)
         {
             e.Handled = true;
 
-            // Save current clipboard content so we can restore it after
+            // Save current clipboard
             string previousClipboard = Clipboard.ContainsText() ? Clipboard.GetText() : "";
 
-            // Simulate Ctrl+C to copy selected text
+            // Simulate Ctrl+C
             System.Windows.Forms.SendKeys.SendWait("^c");
 
-            // Wait briefly for clipboard to update
-            await Task.Delay(200);
+            // Wait for clipboard to update
+            await Task.Delay(300);
 
             string selectedText = Clipboard.GetText();
 
-            // Restore previous clipboard content
+            // Restore previous clipboard
             if (!string.IsNullOrEmpty(previousClipboard))
                 Clipboard.SetText(previousClipboard);
 
-            if (string.IsNullOrWhiteSpace(selectedText))
+            if (string.IsNullOrWhiteSpace(selectedText) || selectedText == previousClipboard)
             {
                 MessageBox.Show("No text selected. Please select some text first.",
                     "Second Brain", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            var savePanel = new SaveNoteWindow(selectedText);
-            savePanel.Show();
+            // If panel already open, just update it and bring to front
+            if (_savePanel != null && _savePanel.IsVisible)
+            {
+                _savePanel.UpdateText(selectedText);
+                _savePanel.Activate();
+                _savePanel.Focus();
+                return;
+            }
+
+            // Create new panel
+            _savePanel = new SaveNoteWindow(selectedText);
+            _savePanel.Topmost = true;
+            _savePanel.Show();
+            _savePanel.Activate();
         }
 
         // Left click — reserved for panel
